@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyj.xyjorder.mapper.OrderMapper">
+    <select id="findAll" resultType="OrderVO">
+        SELECT tab_order.id,tab_user.id AS uid,tab_user.username,tab_user.email,tab_user.address,tab_menu.`name` AS menuname,tab_menu.price * tab_order.amount AS sumprice,tab_order.amount, tab_order.usetime,tab_order.createtime,tab_order.remark,tab_order.status FROM tab_order INNER JOIN tab_user ON tab_order.uid = tab_user.id INNER JOIN tab_menu ON tab_order.mid = tab_menu.id;
+    </select>
+
+    <select id="findMyOrder" resultType="OrderVO">
+        SELECT tab_order.id,tab_user.username,tab_user.email,tab_user.address,tab_menu.`name` AS menuname,tab_menu.image,tab_menu.price * tab_order.amount AS sumprice,tab_order.amount, tab_order.usetime,tab_order.createtime,tab_order.remark,tab_order.status FROM tab_order INNER JOIN tab_user ON tab_order.uid = tab_user.id INNER JOIN tab_menu ON tab_order.mid = tab_menu.id WHERE tab_user.id = #{uid};
+    </select>
+    
+    <update id="affirmUse" parameterType="java.lang.Long">
+        UPDATE tab_order SET status = "已使用",usetime = NOW() WHERE id = #{id};
+    </update>
+
+    <update id="cancelOrder" parameterType="java.lang.Long">
+        UPDATE tab_order SET status = "已取消" WHERE id = #{id};
+    </update>
+
+    <insert id="addOrder" parameterType="Order">
+        INSERT INTO tab_order(uid,mid,amount,remark) VALUES(#{uid},#{mid},#{amount},#{remark});
+    </insert>
+</mapper>

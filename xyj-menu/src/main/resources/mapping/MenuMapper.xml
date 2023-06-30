@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyj.xyjmenu.mapper.MenuMapper">
+<!--    <resultMap id="menuMap" type="Menu">-->
+<!--        <id column="id" property="id"></id>-->
+<!--        <result column="name" property="name"></result>-->
+<!--        <result column="ingredients" property="ingredients"></result>-->
+<!--        <result column="intro" property="intro"></result>-->
+<!--        <result column="price" property="price"></result>-->
+<!--        <result column="image" property="image"></result>-->
+<!--        <result column="name" property="name"></result>-->
+<!--        <association property="type" select="com.xyj.xyjmenu.mapper.tyMapper.findById" column="tid"></association>-->
+<!--    </resultMap>-->
+
+    <select id="findAll" resultType="MenuVO">
+        SELECT tab_menu.id,tab_menu.`name`,tab_type.`name` AS typeName,tab_menu.ingredients,tab_menu.intro,tab_menu.price,tab_menu.image FROM tab_menu LEFT JOIN tab_type ON tab_menu.tid = tab_type.id;
+    </select>
+
+    <select id="findById" parameterType="java.lang.Long" resultType="MenuVO">
+        SELECT tab_menu.id,tab_menu.`name`,tab_type.`name` AS typeName,tab_menu.ingredients,tab_menu.intro,tab_menu.price,tab_menu.image FROM tab_menu LEFT JOIN tab_type ON tab_menu.tid = tab_type.id WHERE tab_menu.id = #{id};
+    </select>
+
+    <select id="findByName" parameterType="java.lang.String" resultType="MenuVO">
+        SELECT tab_menu.id,tab_menu.`name`,tab_type.`name` AS typeName,tab_menu.ingredients,tab_menu.intro,tab_menu.price,tab_menu.image FROM tab_menu LEFT JOIN tab_type ON tab_menu.tid = tab_type.id WHERE tab_menu.name LIKE "%"#{name}"%";
+    </select>
+
+    <select id="findByType" parameterType="java.lang.String" resultType="MenuVO">
+        SELECT tab_menu.id,tab_menu.`name`,tab_type.`name` AS typeName,tab_menu.ingredients,tab_menu.intro,tab_menu.price,tab_menu.image FROM tab_menu LEFT JOIN tab_type ON tab_menu.tid = tab_type.id WHERE tab_type.name = #{typeName};
+    </select>
+
+    <insert id="save" parameterType="MenuDTO">
+        INSERT INTO tab_menu(tid,name,ingredients,intro,price,image) VALUES (#{tid},#{name},#{ingredients},#{intro},#{price},#{image});
+    </insert>
+
+    <update id="update" parameterType="MenuDTO">
+        UPDATE tab_menu SET name = #{name},ingredients = #{ingredients},intro = #{intro},price = #{price},image = #{image},tid = #{tid} WHERE id = #{id};
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM tab_menu WHERE id = #{id};
+    </delete>
+</mapper>

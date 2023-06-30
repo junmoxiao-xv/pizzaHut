@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xyj.xyjorder.mapper.CartMapper">
+    <select id="findMyCart" resultType="CartVO" parameterType="java.lang.Long">
+        SELECT tab_cart.id,tab_menu.id AS mid,tab_menu.`name`,tab_menu.price,tab_menu.image,tab_cart.amount FROM tab_cart RIGHT JOIN tab_menu ON tab_menu.id = tab_cart.mid WHERE tab_cart.uid = #{uid};
+    </select>
+
+    <delete id="deleteCartMenu" parameterType="java.lang.Long">
+        DELETE FROM tab_cart WHERE id = #{id};
+    </delete>
+
+    <update id="addMenu" parameterType="java.lang.Long">
+        UPDATE tab_cart SET amount = amount+1 WHERE id = #{id};
+    </update>
+
+    <update id="subMenu" parameterType="java.lang.Long">
+        UPDATE tab_cart SET amount = amount-1 WHERE id = #{id};
+    </update>
+
+    <insert id="addCart" parameterType="Cart">
+        INSERT INTO tab_cart(uid,mid,amount) VALUES (#{uid},#{mid},#{amount});
+    </insert>
+
+    <select id="getSumPrice" parameterType="java.lang.Long">
+        SELECT IFNULL(SUM(tab_menu.price * tab_cart.amount), 0) AS sumprice FROM tab_cart RIGHT JOIN tab_menu ON tab_menu.id = tab_cart.mid WHERE tab_cart.uid = #{uid};
+    </select>
+</mapper>

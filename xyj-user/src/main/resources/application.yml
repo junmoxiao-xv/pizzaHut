@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: xyj-user
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+  datasource:
+    name: pizzahut
+    url: jdbc:mysql://127.0.0.1:3306/pizzahut?serverTimezone=UTC&characterEncoding=utf8&useUnicode=true&useSSL=false&characterEncoding=utf8
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis:
+  mapper-locations: classpath:/mapping/*.xml
+  type-aliases-package: com.xyj.xyjcommon.entity
+server:
+  port: 8040
+logging:
+  level:
+    com.xyj.xyjuser.mapper: debug
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
